@@ -1,0 +1,25 @@
+<html xmlns:concordion="http://www.concordion.org/2007/concordion">
+<link href="../concordion.css" rel="stylesheet" type="text/css" />
+<body>
+
+    <h1>Idempotencia</h1>
+
+    <p>
+        Cuando se aniade un articulo, la lista permanecece vacia
+    </p>
+
+    <div class="example">
+
+		<h3>Ejemplo</h3>
+		
+        <p>
+            Cuando se aniade el articulo 
+            <b concordion:set="#url">art.culo/interesante.html</b>,
+            la lista esta 
+            <b concordion:assertEquals="articleListAfterAdding(#url)">vacia</b>
+        </p>
+        
+    </div>
+
+</body>
+</html>
