@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<project name="NeverRead" default="start" basedir=".">
+    <property name="src/java" value="${basedir}/src/java"/>
+    <property name="src/test-acceptance" value="${basedir}/src/test-acceptance"/>
+    <property name="build" value="${basedir}/build"/>
+    <property name="results" value="${build}/results"/>
+    <property name="build/main" value="${build}/classes/main"/>
+    <property name="build/test-acceptance" value="${build}/classes/test-acceptance"/>
+
+    <path id="main-dependencies">
+        <fileset dir="${basedir}/libs">
+            <include name="**/*.jar"/>
+        </fileset>
+    </path>
+
+    <path id="main">
+        <path refid="main-dependencies"/>
+        <pathelement location="${build/main}"/>
+    </path>
+
+    <path id="test-dependencies">
+        <path refid="main"/>
+        <fileset dir="${basedir}/test-libs">
+            <include name="**/*.jar"/>
+        </fileset>
+    </path>
+
+    <path id="test">
+        <path refid="test-dependencies"/>
+        <pathelement location="${build/test-acceptance}"/>
+    </path>
+
+    <target name="compile-java" depends="clean">
+        <sequential>
+            <mkdir dir="${build/main}"/>
+            <javac srcdir="${src/java}" destdir="${build/main}" debug="true" source="1.6"
+                   classpathref="main-dependencies" includeantruntime="false"/>
+        </sequential>
+    </target>
+
+    <target name="compile-test-acceptance" depends="compile-java">
+        <sequential>
+            <mkdir dir="${build/test-acceptance}"/>
+            <javac srcdir="${src/test-acceptance}" destdir="${build/test-acceptance}" debug="true" source="1.6"
+                   classpathref="test-dependencies" includeantruntime="false"/>
+        </sequential>
+    </target>
+
+    <target name="produce-report-on-failure" if="test-failure">
+        <junitreport todir="${results}">
+            <fileset dir="${results}" includes="**/*.xml"/>
+            <report format="frames" todir="${results}"/>
+        </junitreport>
+        <fail if="test-failure" message="Tests failed. See ${results}/index.html"/>
+    </target>
+
+    <target name="clean">
+        <delete dir="${build}"/>
+    </target>
+
+    <target name="start" depends="clean, compile-java">
+        <java classname="server.NeverReadServer" fork="true">
+            <classpath refid="main"/>
+        </java>
+    </target>
+
+    <target name="test-acceptance-concordion" depends="clean, compile-test-acceptance">
+        <mkdir dir="${results}/xml/test-concordion"/>
+        <mkdir dir="${results}/concordion"/>
+
+        <copy todir="${build/test-acceptance}">
+            <fileset dir="${src/test-acceptance}" includes="**/concordion/**/*.html"/>
+        </copy>
+
+        <junit fork="yes" forkmode="once" showoutput="yes" failureproperty="test-failure">
+            <jvmarg value="-Dconcordion.output.dir=${results}/concordion"/>
+
+            <classpath refid="test"/>
+            <batchtest todir="${results}/xml/test-concordion">
+                <fileset dir="${build/test-acceptance}" includes="**/concordion/**/*Test.class"/>
+                <formatter type="xml"/>
+            </batchtest>
+        </junit>
+        <antcall target="produce-report-on-failure"/>
+    </target>
+</project>
