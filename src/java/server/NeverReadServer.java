@@ -20,18 +20,17 @@ public class NeverReadServer {
                 response.getWriter().println("" +
                         "<html>\n" +
                         "<head>\n" +
-                        "<title>neverread</title>\n" +
+                        "    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/> \n" +
+                        "    <title>neverread</title>\n" +
                         "</head>\n" +
-                        "<h1>\n" +
-                        "neverread\n" +
-                        "</h1>\n" +
                         "<form>\n" +
                         "<input type=\"text\" name=\"url\"/>\n" +
+                        "<input type=\"submit\" value=\"agregar\"/>\n" +
                         "</form>\n" +
                         "<br/>\n" +
-                        "<h2>Pending articles</h2>\n" +
+                        "<h2>Artículos por leer</h2>\n" +
                         "<ul>\n" +
-//                        "<li>one</li>\n" +
+//                        "<li>Chomsky 9/11</li>\n" +
                         "</ul>\n" +
                         "</html>"
                 );

@@ -66,7 +66,8 @@ public class ListaPermaneceVaciaTest extends ConcordionTestCase {
     }
 
     private WebDriver startWebDriver() {
-        WebDriver driver = new FirefoxDriver(new FirefoxBinary(new File("tools/firefox-rc4.0.1-64bit/firefox-bin")), new FirefoxProfile());
+//        WebDriver driver = new FirefoxDriver(new FirefoxBinary(new File("tools/firefox-rc4.0.1-64bit/firefox-bin")), new FirefoxProfile());
+        WebDriver driver = new HtmlUnitDriver();
         driver.get("http://localhost:8081");
         return driver;
     }
