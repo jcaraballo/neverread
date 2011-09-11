@@ -4,11 +4,22 @@ import org.concordion.integration.junit3.ConcordionTestCase;
 
 import com.thoughtworks.selenium.DefaultSelenium;
 import com.thoughtworks.selenium.Selenium;
+import org.junit.After;
 import org.junit.Before;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.firefox.FirefoxBinary;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.server.RemoteControlConfiguration;
 import org.openqa.selenium.server.SeleniumServer;
 import server.NeverReadServer;
 
+import java.io.File;
+import java.sql.Driver;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -18,33 +29,32 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 public class ListaPermaneceVaciaTest extends ConcordionTestCase {
-    private Selenium selenium;
+    private WebDriver webDriver;
 
     @Before
     public void setUp() throws Exception {
         startBuildAntWebApplication();
-        startSeleniumServer();
-        selenium = startSeleniumRemoteControl();
+        webDriver = startWebDriver();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        webDriver.close();
     }
 
     @SuppressWarnings(value = "unused")
     public String articleListAfterAdding(String url) throws InterruptedException {
-        selenium.type("url", url);
-        selenium.type("url", "\13");
-        int numberOfPendingArticles = selenium.getCssCount("css=li").intValue();
-        List<String> pendingArticles = new ArrayList<String>();
-        for (int i=1; i<=numberOfPendingArticles; i++){
-            pendingArticles.add(selenium.getText("css=li:nth-of-type(" + i + ")"));
-        }
+        webDriver.findElement(By.name("url")).sendKeys(url, Keys.ENTER);
+        List<WebElement> pendingArticles = webDriver.findElements(By.cssSelector("li"));
 
-        if(pendingArticles.size()==0){
+        if (pendingArticles.isEmpty()) {
             return "vacia";
-        }else{
+        } else {
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(pendingArticles.get(0));
+            stringBuilder.append(pendingArticles.get(0).getText());
 
             for (int i = 1; i < pendingArticles.size(); i++) {
-                stringBuilder.append(", ").append(pendingArticles.get(i));
+                stringBuilder.append(", ").append(pendingArticles.get(i).getText());
             }
             return stringBuilder.toString();
         }
@@ -55,21 +65,9 @@ public class ListaPermaneceVaciaTest extends ConcordionTestCase {
         helloTestServer.start(8081);
     }
 
-    private Selenium startSeleniumRemoteControl() {
-        // tip: use firefox-4.0-32bit or similar for 32 bit linux installations
-        Selenium selenium = new DefaultSelenium("localhost", 9091, "*firefox tools/firefox-rc4.0.1-64bit/firefox-bin", "http://localhost:8081");
-        selenium.start();
-
-        selenium.open("http://localhost:8081");
-        selenium.setTimeout("60000");
-        return selenium;
-    }
-
-    private void startSeleniumServer() throws Exception {
-        RemoteControlConfiguration remoteControlConfiguration = new RemoteControlConfiguration();
-        remoteControlConfiguration.setSingleWindow(true);
-        remoteControlConfiguration.setPort(9091);
-        Logger.getLogger("org.openqa.selenium").setLevel(Level.WARNING);
-        new SeleniumServer(false, remoteControlConfiguration).start();
+    private WebDriver startWebDriver() {
+        WebDriver driver = new FirefoxDriver(new FirefoxBinary(new File("tools/firefox-rc4.0.1-64bit/firefox-bin")), new FirefoxProfile());
+        driver.get("http://localhost:8081");
+        return driver;
     }
 }
