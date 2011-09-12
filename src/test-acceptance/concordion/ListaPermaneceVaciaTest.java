@@ -31,24 +31,17 @@ import static org.hamcrest.core.Is.is;
 public class ListaPermaneceVaciaTest extends ConcordionTestCase {
     private WebDriver webDriver;
 
-    @Before
-    public void setUp() throws Exception {
-        startBuildAntWebApplication();
-        webDriver = startWebDriver();
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        webDriver.close();
-    }
-
     @SuppressWarnings(value = "unused")
     public String articleListAfterAdding(String url) throws InterruptedException {
         webDriver.findElement(By.name("url")).sendKeys(url, Keys.ENTER);
         List<WebElement> pendingArticles = webDriver.findElements(By.cssSelector("li"));
 
+        return convertListOfArticlesToString(pendingArticles);
+    }
+
+    private static String convertListOfArticlesToString(List<WebElement> pendingArticles) {
         if (pendingArticles.isEmpty()) {
-            return "vacia";
+            return "vacía";
         } else {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append(pendingArticles.get(0).getText());
@@ -60,13 +53,24 @@ public class ListaPermaneceVaciaTest extends ConcordionTestCase {
         }
     }
 
+    @Before
+    public void setUp() throws Exception {
+        startBuildAntWebApplication();
+        webDriver = startWebDriver();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        webDriver.close();
+    }
+
     private void startBuildAntWebApplication() {
         NeverReadServer helloTestServer = new NeverReadServer();
         helloTestServer.start(8081);
     }
 
     private WebDriver startWebDriver() {
-//        WebDriver driver = new FirefoxDriver(new FirefoxBinary(new File("tools/firefox-rc4.0.1-64bit/firefox-bin")), new FirefoxProfile());
+//        WebDriver driver = new FirefoxDriver(new FirefoxBinary(new File("../tools/firefox-rc4.0.1-64bit/firefox-bin")), new FirefoxProfile());
         WebDriver driver = new HtmlUnitDriver();
         driver.get("http://localhost:8081");
         return driver;
