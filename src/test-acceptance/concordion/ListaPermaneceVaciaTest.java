@@ -1,32 +1,16 @@
 package concordion;
 
 import org.concordion.integration.junit3.ConcordionTestCase;
-
-import com.thoughtworks.selenium.DefaultSelenium;
-import com.thoughtworks.selenium.Selenium;
 import org.junit.After;
 import org.junit.Before;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.firefox.FirefoxBinary;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
-import org.openqa.selenium.server.RemoteControlConfiguration;
-import org.openqa.selenium.server.SeleniumServer;
 import server.NeverReadServer;
 
-import java.io.File;
-import java.sql.Driver;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
 
 public class ListaPermaneceVaciaTest extends ConcordionTestCase {
     private WebDriver webDriver;
