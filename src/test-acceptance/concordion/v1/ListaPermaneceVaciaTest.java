@@ -1,4 +1,4 @@
-package concordion;
+package concordion.v1;
 
 import org.concordion.integration.junit3.ConcordionTestCase;
 import org.junit.After;
@@ -14,6 +14,7 @@ import java.util.List;
 
 public class ListaPermaneceVaciaTest extends ConcordionTestCase {
     private WebDriver webDriver;
+    private NeverReadServer neverread;
 
     @SuppressWarnings(value = "unused")
     public String articleListAfterAdding(String url) throws InterruptedException {
@@ -46,11 +47,12 @@ public class ListaPermaneceVaciaTest extends ConcordionTestCase {
     @After
     public void tearDown() throws Exception {
         webDriver.close();
+        neverread.stop();
     }
 
     private void startBuildAntWebApplication() {
-        NeverReadServer helloTestServer = new NeverReadServer();
-        helloTestServer.start(8081);
+        neverread = new NeverReadServer();
+        neverread.start(8081);
     }
 
     private WebDriver startWebDriver() {

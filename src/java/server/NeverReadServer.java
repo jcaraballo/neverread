@@ -10,8 +10,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class NeverReadServer {
+    private Server server;
+
     public void start(int port) {
-        Server server = new Server(port);
+        server = new Server(port);
         server.setHandler(new AbstractHandler() {
             @Override
             public void handle(String s, HttpServletRequest request, HttpServletResponse response, int i) throws IOException, ServletException {
@@ -34,7 +36,7 @@ public class NeverReadServer {
                         "</ul>\n" +
                         "</html>"
                 );
-                ((Request)request).setHandled(true);
+                ((Request) request).setHandled(true);
             }
         });
 
@@ -46,6 +48,10 @@ public class NeverReadServer {
                     "Never Read Server could not be started", e
             );
         }
+    }
+
+    public void stop() throws Exception {
+        server.stop();
     }
 
     public static void main(String[] args) {
