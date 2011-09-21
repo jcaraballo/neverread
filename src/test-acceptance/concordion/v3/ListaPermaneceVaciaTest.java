@@ -1,6 +1,5 @@
 package concordion.v3;
 
-import concordion.Functional;
 import concordion.v3.tools.PageDriver;
 import org.concordion.integration.junit3.ConcordionTestCase;
 import org.junit.After;
@@ -30,7 +29,8 @@ public class ListaPermaneceVaciaTest extends ConcordionTestCase {
 
     @Before
     public void setUp() throws Exception {
-        startBuildAntWebApplication(8081);
+        neverread = new NeverReadServer();
+        neverread.start(8081);
         page = PageDriver.start("http://localhost:8081");
     }
 
@@ -38,10 +38,5 @@ public class ListaPermaneceVaciaTest extends ConcordionTestCase {
     public void tearDown() throws Exception {
         page.close();
         neverread.stop();
-    }
-
-    private void startBuildAntWebApplication(int port) {
-        neverread = new NeverReadServer();
-        neverread.start(port);
     }
 }

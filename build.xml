@@ -64,6 +64,18 @@
         </java>
     </target>
 
+    <target name="test-acceptance-java" description="runs pure java acceptance tests" depends="clean, compile-test-acceptance">
+        <mkdir dir="${results}/xml/test-acceptance-java"/>
+        <junit fork="yes" forkmode="once" showoutput="yes" failureproperty="test-failure">
+            <classpath refid="test"/>
+            <batchtest todir="${results}/xml/test-acceptance-java">
+                <fileset dir="${build/test-acceptance}" includes="**/*Test.class" excludes="**/concordion/**"/>
+                <formatter type="xml"/>
+            </batchtest>
+        </junit>
+        <antcall target="produce-report-on-failure"/>
+    </target>
+
     <target name="test-acceptance-concordion" depends="clean, compile-test-acceptance">
         <mkdir dir="${results}/xml/test-concordion"/>
         <mkdir dir="${results}/concordion"/>
@@ -74,7 +86,6 @@
 
         <junit fork="yes" forkmode="once" showoutput="yes" failureproperty="test-failure">
             <jvmarg value="-Dconcordion.output.dir=${results}/concordion"/>
-
             <classpath refid="test"/>
             <batchtest todir="${results}/xml/test-concordion">
                 <fileset dir="${build/test-acceptance}" includes="**/concordion/**/*Test.class"/>

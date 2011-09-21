@@ -8,6 +8,8 @@ import server.NeverReadServer;
 
 import java.util.List;
 
+import static concordion.Functional.join;
+
 public class ListaPermaneceVaciaTest extends ConcordionTestCase {
     private NeverReadDriver driver;
     private NeverReadServer neverread;
@@ -19,22 +21,14 @@ public class ListaPermaneceVaciaTest extends ConcordionTestCase {
     }
 
     private static String convertListOfArticlesToString(List<String> pendingArticles) {
-        if (pendingArticles.isEmpty()) {
-            return "vacía";
-        } else {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(pendingArticles.get(0));
-
-            for (int i = 1; i < pendingArticles.size(); i++) {
-                stringBuilder.append(", ").append(pendingArticles.get(i));
-            }
-            return stringBuilder.toString();
-        }
+        String joined = join(pendingArticles, ", ");
+        return joined.isEmpty() ? "vacía" : joined;
     }
 
     @Before
     public void setUp() throws Exception {
-        startApplication(8081);
+        neverread = new NeverReadServer();
+        neverread.start(8081);
         driver = NeverReadDriver.start("http://localhost:8081");
     }
 
@@ -42,10 +36,5 @@ public class ListaPermaneceVaciaTest extends ConcordionTestCase {
     public void tearDown() throws Exception {
         driver.close();
         neverread.stop();
-    }
-
-    private void startApplication(int port) {
-        neverread = new NeverReadServer();
-        neverread.start(port);
     }
 }

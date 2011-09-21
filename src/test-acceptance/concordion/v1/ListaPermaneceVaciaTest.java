@@ -40,25 +40,18 @@ public class ListaPermaneceVaciaTest extends ConcordionTestCase {
 
     @Before
     public void setUp() throws Exception {
-        startBuildAntWebApplication();
-        webDriver = startWebDriver();
+        neverread = new NeverReadServer();
+        neverread.start(8081);
+
+        //        WebDriver driver = new FirefoxDriver(new FirefoxBinary(new File("../tools/firefox-rc4.0.1-64bit/firefox-bin")), new FirefoxProfile());
+        WebDriver driver = new HtmlUnitDriver();
+        driver.get("http://localhost:8081");
+        webDriver = driver;
     }
 
     @After
     public void tearDown() throws Exception {
         webDriver.close();
         neverread.stop();
-    }
-
-    private void startBuildAntWebApplication() {
-        neverread = new NeverReadServer();
-        neverread.start(8081);
-    }
-
-    private WebDriver startWebDriver() {
-//        WebDriver driver = new FirefoxDriver(new FirefoxBinary(new File("../tools/firefox-rc4.0.1-64bit/firefox-bin")), new FirefoxProfile());
-        WebDriver driver = new HtmlUnitDriver();
-        driver.get("http://localhost:8081");
-        return driver;
     }
 }
