@@ -1,4 +1,4 @@
-package concordion.v2.tools;
+package concordion.v2_appdriver.tools;
 
 import concordion.Functional.Functor;
 import org.openqa.selenium.By;
