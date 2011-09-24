@@ -1,6 +1,5 @@
 package concordion.v2.tools;
 
-import concordion.Functional;
 import concordion.Functional.Functor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -25,11 +24,6 @@ public class NeverReadDriver {
 
     public void addArticle(String url) {
         webDriver.findElement(By.name("url")).sendKeys(url, Keys.ENTER);
-    }
-
-    public void assertThatTheListOfArticlesIs(String listOfArticlesAsString) {
-        List<String> articles = stringToArticles(listOfArticlesAsString);
-        assertThat(getListOfArticles(), is(articles));
     }
 
     public List<String> getListOfArticles() {
