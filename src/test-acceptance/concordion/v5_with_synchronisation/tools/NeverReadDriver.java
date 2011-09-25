@@ -28,7 +28,7 @@ public class NeverReadDriver {
         new WebDriverWait(webDriver, 2).until(new ExpectedCondition<Object>() {
             @Override
             public Object apply(WebDriver webDriver) {
-                return "".equals(NeverReadDriver.this.webDriver.findElement(By.name("url")).getAttribute("value"));
+                return "".equals(webDriver.findElement(By.name("url")).getAttribute("value"));
             }
         });
     }
