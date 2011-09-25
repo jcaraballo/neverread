@@ -1,4 +1,4 @@
-package concordion.v2_appdriver.tools;
+package concordion.v5_with_synchronisation.tools;
 
 import concordion.Functional.Functor;
 import org.openqa.selenium.By;
@@ -6,14 +6,14 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static concordion.Functional.collect;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
 
 public class NeverReadDriver {
     private final WebDriver webDriver;
@@ -24,6 +24,13 @@ public class NeverReadDriver {
 
     public void addArticle(String url) {
         webDriver.findElement(By.name("url")).sendKeys(url, Keys.ENTER);
+
+        new WebDriverWait(webDriver, 2).until(new ExpectedCondition<Object>() {
+            @Override
+            public Object apply(WebDriver webDriver) {
+                return "".equals(NeverReadDriver.this.webDriver.findElement(By.name("url")).getAttribute("value"));
+            }
+        });
     }
 
     public List<String> getListOfArticles() {
@@ -39,17 +46,10 @@ public class NeverReadDriver {
     }
 
     private static WebDriver startWebDriver(String url) {
-        WebDriver driver = new HtmlUnitDriver();
+        WebDriver driver = new HtmlUnitDriver(true);
         driver.get(url);
-        return driver;
-    }
 
-    private static List<String> stringToArticles(String listOfArticlesAsString) {
-        if ("vacía".equals(listOfArticlesAsString)) {
-            return new ArrayList<String>();
-        } else {
-            return Arrays.asList(listOfArticlesAsString.split(","));
-        }
+        return driver;
     }
 
     private static List<String> webElementsToTheirTexts(List<WebElement> pendingArticles) {

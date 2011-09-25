@@ -23,7 +23,6 @@ public class PageDriver {
     }
 
     public static WebDriver startWebDriver(String url) {
-//        WebDriver driver = new FirefoxDriver(new FirefoxBinary(new File("../tools/firefox-rc4.0.1-64bit/firefox-bin")), new FirefoxProfile());
         WebDriver driver = new HtmlUnitDriver();
         driver.get(url);
         return driver;

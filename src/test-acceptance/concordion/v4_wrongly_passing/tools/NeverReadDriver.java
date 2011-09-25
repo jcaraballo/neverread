@@ -1,4 +1,4 @@
-package concordion.v4_asynchronous_wrongly_passing.tools;
+package concordion.v4_wrongly_passing.tools;
 
 import concordion.Functional.Functor;
 import org.openqa.selenium.By;
@@ -37,18 +37,9 @@ public class NeverReadDriver {
     }
 
     private static WebDriver startWebDriver(String url) {
-        //        WebDriver driver = new FirefoxDriver(new FirefoxBinary(new File("../tools/firefox-rc4.0.1-64bit/firefox-bin")), new FirefoxProfile());
         WebDriver driver = new HtmlUnitDriver(true);
         driver.get(url);
         return driver;
-    }
-
-    private static List<String> stringToArticles(String listOfArticlesAsString) {
-        if ("vacía".equals(listOfArticlesAsString)) {
-            return new ArrayList<String>();
-        } else {
-            return Arrays.asList(listOfArticlesAsString.split(","));
-        }
     }
 
     private static List<String> webElementsToTheirTexts(List<WebElement> pendingArticles) {

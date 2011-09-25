@@ -64,6 +64,12 @@
         </java>
     </target>
 
+    <target name="mayberead" depends="clean, compile-java">
+        <java classname="server.MaybeReadServer" fork="true">
+            <classpath refid="main"/>
+        </java>
+    </target>
+
     <target name="test-acceptance-java" depends="clean, compile-test-acceptance">
         <mkdir dir="${results}/xml/test-acceptance-java"/>
         <junit fork="yes" forkmode="once" showoutput="yes" failureproperty="test-failure">

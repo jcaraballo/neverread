@@ -9,9 +9,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class MaybeReadServer {
+public class MaybeReadServer implements App {
     private Server server;
 
+    @Override
     public void start(int port) {
         server = new Server(port);
         server.setHandler(new AbstractHandler() {
@@ -65,6 +66,7 @@ public class MaybeReadServer {
         }
     }
 
+    @Override
     public void stop() throws Exception {
         server.stop();
     }

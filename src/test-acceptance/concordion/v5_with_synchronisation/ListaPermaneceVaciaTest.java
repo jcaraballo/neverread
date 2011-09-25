@@ -1,10 +1,11 @@
-package concordion.v4_asynchronous_wrongly_passing;
+package concordion.v5_with_synchronisation;
 
-import concordion.v4_asynchronous_wrongly_passing.tools.NeverReadDriver;
+import concordion.v5_with_synchronisation.tools.NeverReadDriver;
 import org.concordion.integration.junit3.ConcordionTestCase;
 import org.junit.After;
 import org.junit.Before;
-import server.MaybeReadServer;
+import server.App;
+import server.NeverReadServer;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ import static concordion.Functional.join;
 
 public class ListaPermaneceVaciaTest extends ConcordionTestCase {
     private NeverReadDriver driver;
-    private MaybeReadServer mayberead;
+    private App app;
 
     @SuppressWarnings(value = "unused")
     public String articleListAfterAdding(String article) throws InterruptedException {
@@ -27,14 +28,15 @@ public class ListaPermaneceVaciaTest extends ConcordionTestCase {
 
     @Before
     public void setUp() throws Exception {
-        mayberead = new MaybeReadServer();
-        mayberead.start(8081);
+//        app = new MaybeReadServer(); // correctly fails
+        app = new NeverReadServer();
+        app.start(8081);
         driver = NeverReadDriver.start("http://localhost:8081");
     }
 
     @After
     public void tearDown() throws Exception {
         driver.close();
-        mayberead.stop();
+        app.stop();
     }
 }
